@@ -6,5 +6,6 @@ using Microsoft.Data.SqlClient;
 
 ICustomerRepository repos = new CustomerRepository();
 TestRepository test = new TestRepository();
-test.TestSelectAll(repos);
+//test.TestSelectAll(repos);
+test.TestGetCustomerById(repos);
 

@@ -3,6 +3,7 @@ using AssignmentoSecondo.Modules;
 using Microsoft.Data.SqlClient;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,33 +12,6 @@ namespace AssignmentoSecondo.Repositories
 {
     internal class CustomerRepository : ICustomerRepository
     {
-        public bool AddNewCustomer(Customer customer)
-        {
-            bool sucsess = false;
-            string sql = "INSERT INTO Customers(FirstName,LastName,Country,PostalCode,Phone,Email) " +
-                "VALUES(@FirstName, @LastName, @Country, @PostalCode, @Phone, @Email)";
-            try
-            {
-                using(SqlConnection conn = new SqlConnection(ConnectionStringHelper.GetConnectionString()))
-                {
-                    conn.Open();
-                    using (SqlCommand cmd = new SqlCommand(sql, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@FirstName", customer.FirstName);
-                        cmd.Parameters.AddWithValue("@LastName", customer.LastName);
-                        cmd.Parameters.AddWithValue("@Country", customer.Country);
-                        cmd.Parameters.AddWithValue("@PostalCode", customer.PostalCode);
-                        cmd.Parameters.AddWithValue("@Phone", customer.Phone);
-                        cmd.Parameters.AddWithValue("@Email", customer.Email);
-                        sucsess = cmd.ExecuteNonQuery() > 0 ? true : false;
-                    }
-                }
-            } catch (Exception ex)
-            {
-                //Logging all the errors
-            }
-            return sucsess;
-        }
 
         public List<Customer> GetAllCustomers()
         {
@@ -82,8 +56,36 @@ namespace AssignmentoSecondo.Repositories
 
         public Customer GetCustomerById(int id)
         {
-            string sql = "SELECT CustomerId,FirstName, LastName , Country, PostalCode,Phone, Email FROM Customer WHERE CustomerId = @CustomerId ";
-            throw new NotImplementedException();
+            Customer customer; 
+            string sql = "SELECT CustomerId, FirstName, LastName, Country, PostalCode, Phone, Email FROM dbo.Customer WHERE CustomerId = 1 ";
+
+            using SqlConnection conn = new SqlConnection(ConnectionStringHelper.GetConnectionString());
+            conn.Open();
+            using SqlCommand cmd = new SqlCommand(sql, conn);
+            //cmd.Parameters.AddWithValue("@CustomerId", id);
+            using SqlDataReader reader = cmd.ExecuteReader();
+
+                if (reader.NextResult())
+                {
+                    customer = new Customer()
+                    {
+                        CustomerId = reader.GetInt32(0),
+                        FirstName = reader.GetString(1),
+                        LastName = reader.GetString(2),
+                        Country = reader.GetString(3),
+                        PostalCode = reader.GetString(4),
+                        Phone = reader.GetString(5),
+                        Email = reader.GetString(6)
+                    };
+                }
+                else
+                {
+                    throw new Exception("Did not find anything");
+                }
+            
+                return customer;
+           
+
         }
 
         public Customer GetCustomerByName(string firstName, string lastName)
@@ -116,6 +118,34 @@ namespace AssignmentoSecondo.Repositories
             throw new NotImplementedException();
         }
 
+        public bool AddNewCustomer(Customer customer)
+        {
+            bool sucsess = false;
+            string sql = "INSERT INTO Customers(FirstName,LastName,Country,PostalCode,Phone,Email) " +
+                "VALUES(@FirstName, @LastName, @Country, @PostalCode, @Phone, @Email)";
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(ConnectionStringHelper.GetConnectionString()))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@FirstName", customer.FirstName);
+                        cmd.Parameters.AddWithValue("@LastName", customer.LastName);
+                        cmd.Parameters.AddWithValue("@Country", customer.Country);
+                        cmd.Parameters.AddWithValue("@PostalCode", customer.PostalCode);
+                        cmd.Parameters.AddWithValue("@Phone", customer.Phone);
+                        cmd.Parameters.AddWithValue("@Email", customer.Email);
+                        sucsess = cmd.ExecuteNonQuery() > 0 ? true : false;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                //Logging all the errors
+            }
+            return sucsess;
+        }
         public bool UpdateNewCustomer(Customer customer)
         {
             string sql = "";

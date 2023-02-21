@@ -1,4 +1,5 @@
-﻿using AssignmentoSecondo.Repositories;
+﻿using AssignmentoSecondo.Modules;
+using AssignmentoSecondo.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,13 @@ namespace AssignmentoSecondo
         public void TestSelectAll(ICustomerRepository repos)
         {
             repos.GetAllCustomers().ForEach(x => Console.WriteLine(x.ToString()));
+        }
+
+        public void TestGetCustomerById(ICustomerRepository repos)
+        {
+            Customer? customer = repos.GetCustomerById(1);
+            Console.WriteLine(customer.ToString());
+
         }
     }
 }
