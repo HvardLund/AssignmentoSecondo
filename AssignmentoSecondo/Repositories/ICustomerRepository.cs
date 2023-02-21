@@ -16,7 +16,6 @@ namespace AssignmentoSecondo.Repositories
         public CustomerSpender GetCustomersByBiggestSpender();
         public CustomerGenre GetCustomerFavoriteGenre(int id);
         public List<Customer> GetAllCustomers();
-        //Pagination here
         public bool AddNewCustomer(Customer customer);
         public bool UpdateNewCustomer(Customer customer);
     }
