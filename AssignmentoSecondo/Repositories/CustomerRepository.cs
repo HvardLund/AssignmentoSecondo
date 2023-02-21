@@ -13,8 +13,30 @@ namespace AssignmentoSecondo.Repositories
     {
         public bool AddNewCustomer(Customer customer)
         {
-            string sql = "";
-            throw new NotImplementedException();
+            bool sucsess = false;
+            string sql = "INSERT INTO Customers(FirstName,LastName,Country,PostalCode,Phone,Email) " +
+                "VALUES(@FirstName, @LastName, @Country, @PostalCode, @Phone, @Email)";
+            try
+            {
+                using(SqlConnection conn = new SqlConnection(ConnectionStringHelper.GetConnectionString()))
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(sql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@FirstName", customer.FirstName);
+                        cmd.Parameters.AddWithValue("@LastName", customer.LastName);
+                        cmd.Parameters.AddWithValue("@Country", customer.Country);
+                        cmd.Parameters.AddWithValue("@PostalCode", customer.PostalCode);
+                        cmd.Parameters.AddWithValue("@Phone", customer.Phone);
+                        cmd.Parameters.AddWithValue("@Email", customer.Email);
+                        sucsess = cmd.ExecuteNonQuery() > 0 ? true : false;
+                    }
+                }
+            } catch (Exception ex)
+            {
+                //Logging all the errors
+            }
+            return sucsess;
         }
 
         public List<Customer> GetAllCustomers()
@@ -60,13 +82,13 @@ namespace AssignmentoSecondo.Repositories
 
         public Customer GetCustomerById(int id)
         {
-            string sql = "SELECT CustomerId,FirstName, LastName , Country, PostalCode,Phone, Email FROM Customer WHERE CustomerId = ";
+            string sql = "SELECT CustomerId,FirstName, LastName , Country, PostalCode,Phone, Email FROM Customer WHERE CustomerId = @CustomerId ";
             throw new NotImplementedException();
         }
 
         public Customer GetCustomerByName(string firstName, string lastName)
         {
-            string sql = " SELECT CustomerId,FirstName, LastName , Country, PostalCode,Phone, Email FROM Customer WHERE FirstName LIKE '%' ";
+            string sql = " SELECT CustomerId,FirstName, LastName , Country, PostalCode,Phone, Email FROM Customer WHERE FirstName LIKE '@FirstName%' ";
             throw new NotImplementedException();
         }
 
@@ -76,7 +98,7 @@ namespace AssignmentoSecondo.Repositories
                     "INNER JOIN InvoiceLine on Invoice.InvoiceId = InvoiceLine.InvoiceId " +
                     "INNER JOIN Track on InvoiceLine.TrackId = Track.TrackId " +
                     "INNER JOIN Genre on Track.GenreId = Genre.GenreId" +
-                    "WHERE CustomerId = " +
+                    "WHERE CustomerId = @CustomerId" +
                     "GROUP BY Genre.Name" +
                     "ORDER BY PopularGenre DESC";
             throw new NotImplementedException();
