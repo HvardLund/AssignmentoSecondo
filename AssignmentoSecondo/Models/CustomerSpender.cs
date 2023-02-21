@@ -6,9 +6,6 @@ using System.Threading.Tasks;
 
 namespace AssignmentoSecondo.Models
 {
-    internal class CustomerSpender
-    {
-        public int CustomerId { get; set; }
-        public double TotalAmount { get; set; }
-    }
+    internal readonly record struct CustomerSpender(int CustomerId, double TotalAmount);
+
 }

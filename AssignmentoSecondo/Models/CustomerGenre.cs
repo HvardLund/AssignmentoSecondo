@@ -6,9 +6,6 @@ using System.Threading.Tasks;
 
 namespace AssignmentoSecondo.Models
 {
-    internal class CustomerGenre
-    {
-        public string Name { get; set; }
-        public int PopularGenre { get; set; }
-    }
+    internal readonly record struct CustomerGenre(string Name, int PopularGenre);
+
 }
