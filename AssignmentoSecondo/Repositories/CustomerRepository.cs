@@ -214,7 +214,7 @@ namespace AssignmentoSecondo.Repositories
             List<CustomerCountry> customersByCountry = new List<CustomerCountry>();
             using SqlConnection connection = new SqlConnection(ConnectionStringHelper.GetConnectionString());
             connection.Open();
-            string sql = "SELECT Country, COUNT(CustomerId) NumberOfCustomers FROM dbo.Customer GROUP BY Country ORDER BY NumberOfCustomers";
+            string sql = "SELECT Country, COUNT(CustomerId) NumberOfCustomers FROM dbo.Customer GROUP BY Country ORDER BY NumberOfCustomers DESC";
             SqlCommand command = new SqlCommand(sql, connection);
             using SqlDataReader reader = command.ExecuteReader();
             while (reader.Read())

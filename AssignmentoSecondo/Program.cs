@@ -8,8 +8,8 @@ using static System.Net.Mime.MediaTypeNames;
 ICustomerRepository repos = new CustomerRepository();
 
 
-//test.TestGetCustomersByCountry(repos);
-//test.TestGetCustomersByTotalAmountBought(repos);
+TestRepository.TestGetCustomersByCountry(repos);
+//TestRepository.TestGetCustomersByTotalAmountBought(repos);
 //TestRepository.TestAddNewCustomer(repos);
 //TestRepository.TestUpdateCustomer(repos);
 //TestRepository.TestGetCustomerById(repos);
@@ -17,4 +17,4 @@ ICustomerRepository repos = new CustomerRepository();
 //TestRepository.TestSelectAll(repos);
 //TestRepository.TestGetCustomerByName(repos);
 //TestRepository.TestDelete(repos);
-TestRepository.TestPagination(repos);
+//TestRepository.TestPagination(repos);
