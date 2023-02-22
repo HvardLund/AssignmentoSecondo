@@ -6,16 +6,16 @@ For the C# application to work, Microsoft.Data.SqlClient should be installed usi
 https://www.nuget.org/packages/Microsoft.Data.SqlClient
 
 ## Usage
-Database transactions supported by the console application:
+Database transactions supported by the console application: <br />
 
-Return a single instance from the database by id: GetCustomerById
-Return a single instance from the database by name: GetCustomerByName
-Return a single instance from the database by name: GetCustomersByCountry
-Return the customer in the database that has spent the highest amount: GetCustomersByBiggestSpender
-Return the favourite genre of a customer by amount of tracks bought that belongs to that genre:  GetCustomerFavoriteGenre
-Return all customers: GetAllCustomers
-Add a new customer to the database: AddNewCustomer
-Change the values of fields in a single Customer instance: UpdateCustomer
+Return a single instance from the database by id: GetCustomerById <br />
+Return a single instance from the database by name: GetCustomerByName <br />
+Return a single instance from the database by name: GetCustomersByCountry <br />
+Return the customer in the database that has spent the highest amount: GetCustomersByBiggestSpender <br />
+Return the favourite genre of a customer by amount of tracks bought that belongs to that genre:  GetCustomerFavoriteGenre <br />
+Return all customers: GetAllCustomers <br />
+Add a new customer to the database: AddNewCustomer <br />
+Change the values of fields in a single Customer instance: UpdateCustomer <br />
 
 ## Authors
 The authors of this project are Håvard Lund and Erik Skryseth
