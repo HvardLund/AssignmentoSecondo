@@ -29,17 +29,17 @@ namespace AssignmentoSecondo.Repositories
                         {
                             while (reader.Read())
                             {
-                                customers.Add(new Customer()
-                                {
-                                    CustomerId = reader.GetInt32(0),
-                                    FirstName = reader.GetString(1),
-                                    LastName = reader.GetString(2),
-                                    Country = reader.GetString(3),
-                                    PostalCode = reader.GetString(4),
-                                    Phone = reader.GetString(5),
-                                    Email = reader.GetString(6)
+                                customers.Add(new Customer(
+                                
+                                    reader.GetInt32(0),
+                                    reader.GetString(1),
+                                    reader.GetString(2),
+                                    reader.GetString(3),
+                                    reader.GetString(4),
+                                    reader.GetString(5),
+                                    reader.GetString(6)
 
-                                });
+                                ));
                             }
                         }
                     }
@@ -56,66 +56,121 @@ namespace AssignmentoSecondo.Repositories
 
         public Customer GetCustomerById(int id)
         {
-            Customer customer; 
-            string sql = "SELECT CustomerId, FirstName, LastName, Country, PostalCode, Phone, Email FROM dbo.Customer WHERE CustomerId = 1 ";
+            Customer customer;
+            using SqlConnection connection = new SqlConnection((ConnectionStringHelper.GetConnectionString()));
+            connection.Open();
+            string sql = "SELECT CustomerId, FirstName, LastName, Country, PostalCode, Phone, Email FROM Customer WHERE CustomerId = @CustomerId";
+            using SqlCommand cmd = new SqlCommand(sql, connection);
+            cmd.Parameters.AddWithValue("@CustomerId", id);
+            using SqlDataReader reader = cmd.ExecuteReader();
+            
+            if(reader.NextResult())
+            {
+                customer = new Customer(
+                    reader.GetInt32(0),
+                    reader.GetString(1),
+                    reader.GetString(2),
+                    reader.GetString(3),
+                    reader.GetString(4),
+                    reader.GetString(5),
+                    reader.GetString(6)
+                    );
+            } else
+            {
+                throw new Exception("Fant ingenting!");
+            }
+            return customer;
+        }
 
+        public List<Customer> GetCustomerByName(string firstName, string lastName)
+        {
+            List<Customer> customers = new List<Customer>();
             using SqlConnection conn = new SqlConnection(ConnectionStringHelper.GetConnectionString());
             conn.Open();
-            using SqlCommand cmd = new SqlCommand(sql, conn);
-            //cmd.Parameters.AddWithValue("@CustomerId", id);
-            using SqlDataReader reader = cmd.ExecuteReader();
+            string sql = "SELECT CustomerId,FirstName, LastName, Country, PostalCode, Phone, Email FROM Customer WHERE FirstName LIKE @FirstName AND LastName LIKE @LastName ";
+            SqlCommand command = new SqlCommand(sql, conn);
+            command.Parameters.AddWithValue("@FirstName", firstName + "%");
+            command.Parameters.AddWithValue("@LastName", lastName +"%");
+            using SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                customers.Add(new Customer(
 
-                if (reader.NextResult())
-                {
-                    customer = new Customer()
-                    {
-                        CustomerId = reader.GetInt32(0),
-                        FirstName = reader.GetString(1),
-                        LastName = reader.GetString(2),
-                        Country = reader.GetString(3),
-                        PostalCode = reader.GetString(4),
-                        Phone = reader.GetString(5),
-                        Email = reader.GetString(6)
-                    };
-                }
-                else
-                {
-                    throw new Exception("Did not find anything");
-                }
-            
-                return customer;
-           
+                    reader.GetInt32(0),
+                    reader.GetString(1),
+                    reader.GetString(2),
+                    reader.GetString(3),
+                    reader.GetString(4),
+                    reader.GetString(5),
+                    reader.GetString(6)
+                ));
+            }
 
+            return customers;
         }
 
-        public Customer GetCustomerByName(string firstName, string lastName)
+        public List<CustomerGenre> GetCustomerFavoriteGenre(int id)
         {
-            string sql = " SELECT CustomerId,FirstName, LastName , Country, PostalCode,Phone, Email FROM Customer WHERE FirstName LIKE '@FirstName%' ";
-            throw new NotImplementedException();
-        }
-
-        public CustomerGenre GetCustomerFavoriteGenre(int id)
-        {
+            List<CustomerGenre> favoriteGenres = new List<CustomerGenre>();
+            using SqlConnection connection = new SqlConnection(ConnectionStringHelper.GetConnectionString());
+            connection.Open();
             string sql = "SELECT Genre.Name,  COUNT(Genre.GenreId) PopularGenre FROM Invoice " +
                     "INNER JOIN InvoiceLine on Invoice.InvoiceId = InvoiceLine.InvoiceId " +
                     "INNER JOIN Track on InvoiceLine.TrackId = Track.TrackId " +
-                    "INNER JOIN Genre on Track.GenreId = Genre.GenreId" +
-                    "WHERE CustomerId = @CustomerId" +
-                    "GROUP BY Genre.Name" +
+                    "INNER JOIN Genre on Track.GenreId = Genre.GenreId " +
+                    "WHERE CustomerId = @CustomerId " +
+                    "GROUP BY Genre.Name " +
                     "ORDER BY PopularGenre DESC";
-            throw new NotImplementedException();
+            SqlCommand command = new SqlCommand(sql, connection);
+            command.Parameters.AddWithValue("@CustomerId", id);
+            using SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                favoriteGenres.Add(new CustomerGenre(
+                
+                    reader.GetString(0),
+                    reader.GetInt32(1)
+                ));
+            }
+            
+            
+            return favoriteGenres;
         }
 
-        public CustomerSpender GetCustomersByBiggestSpender()
+        public List<CustomerSpender> GetCustomersByBiggestSpender()
         {
+            List<CustomerSpender> whales = new List<CustomerSpender>();
+            using SqlConnection connection = new SqlConnection(ConnectionStringHelper.GetConnectionString());
+            connection.Open();
             string sql = "SELECT CustomerId, SUM(Total) TotalAmount FROM Invoice GROUP BY CustomerId ORDER BY TotalAmount DESC";
-            throw new NotImplementedException();
+            SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                whales.Add(new CustomerSpender(
+                    reader.GetInt32(0),
+                    reader.GetDecimal(1)
+                    ));
+            }
+            return whales;
         }
 
-        public CustomerCountry GetCustomersByCountry()
+        public List<CustomerCountry> GetCustomersByCountry()
         {
-            string sql = "SELECT Country, COUNT(CustomerId) NumberOfCustomers FROM dbo.Customer GROUP BY Country ORDER BY NumberOfCustomer";
-            throw new NotImplementedException();
+            List<CustomerCountry> customersByCountry = new List<CustomerCountry>();
+            using SqlConnection connection = new SqlConnection(ConnectionStringHelper.GetConnectionString());
+            connection.Open();
+            string sql = "SELECT Country, COUNT(CustomerId) NumberOfCustomers FROM dbo.Customer GROUP BY Country ORDER BY NumberOfCustomers";
+            SqlCommand command = new SqlCommand(sql, connection);
+            using SqlDataReader reader = command.ExecuteReader();
+            while (reader.Read())
+            {
+                customersByCountry.Add(new CustomerCountry(
+                    reader.GetString(0),
+                    reader.GetInt32(1)
+                    ));
+            }
+            return customersByCountry;
         }
 
         public bool AddNewCustomer(Customer customer)
@@ -148,7 +203,7 @@ namespace AssignmentoSecondo.Repositories
         }
         public bool UpdateNewCustomer(Customer customer)
         {
-            string sql = "";
+            
             throw new NotImplementedException();
         }
     }

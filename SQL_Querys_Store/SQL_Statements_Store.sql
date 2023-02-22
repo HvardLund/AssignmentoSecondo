@@ -1,8 +1,10 @@
+USE Chinook;
+
 SELECT CustomerId,FirstName, LastName , Country, PostalCode,Phone, Email FROM dbo.Customer;
 
-SELECT * FROM Customer;
+SELECT CustomerId,FirstName, LastName , Country, PostalCode,Phone, Email FROM Customer WHERE CustomerId = 1;
 
-SELECT * FROM dbo.Customer WHERE Customer.FirstName LIKE '%';
+SELECT * FROM dbo.Customer WHERE FirstName LIKE '%' AND LastName LIKE 'Jon%';
 
 SELECT Country, COUNT(CustomerId) NumberOfCustomers FROM dbo.Customer GROUP BY Country ORDER BY NumberOfCustomers DESC;
 

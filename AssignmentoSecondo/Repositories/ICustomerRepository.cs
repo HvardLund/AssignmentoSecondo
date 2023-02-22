@@ -11,10 +11,10 @@ namespace AssignmentoSecondo.Repositories
     internal interface ICustomerRepository
     {
         public Customer GetCustomerById(int id);
-        public Customer GetCustomerByName(string firstName, string lastName);
-        public CustomerCountry GetCustomersByCountry();
-        public CustomerSpender GetCustomersByBiggestSpender();
-        public CustomerGenre GetCustomerFavoriteGenre(int id);
+        public List<Customer> GetCustomerByName(string firstName, string lastName);
+        public List<CustomerCountry> GetCustomersByCountry();
+        public List<CustomerSpender> GetCustomersByBiggestSpender();
+        public List<CustomerGenre> GetCustomerFavoriteGenre(int id);
         public List<Customer> GetAllCustomers();
         public bool AddNewCustomer(Customer customer);
         public bool UpdateNewCustomer(Customer customer);

@@ -6,6 +6,6 @@ using System.Threading.Tasks;
 
 namespace AssignmentoSecondo.Models
 {
-    internal readonly record struct CustomerSpender(int CustomerId, double TotalAmount);
+    internal readonly record struct CustomerSpender(int CustomerId, decimal TotalAmount);
 
 }
