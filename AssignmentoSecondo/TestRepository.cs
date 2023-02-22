@@ -34,7 +34,7 @@ namespace AssignmentoSecondo
 
         public static void TestGetCustomerByName(ICustomerRepository repos)
         {
-            string firstName = "Nil";
+            string firstName = "E";
             string lastName = "";
             List<Customer> customers = repos.GetCustomerByName(firstName, lastName);
             customers.ForEach(x => Console.WriteLine(x.ToString()));
@@ -62,7 +62,7 @@ namespace AssignmentoSecondo
 
         public static void TestUpdateCustomer(ICustomerRepository repos)
         {
-            Customer customer = repos.GetCustomerById(60);
+            Customer customer = repos.GetCustomerById(62);
             Customer updatedCustomer = new Customer()
             {
                 CustomerId = customer.CustomerId,
@@ -79,7 +79,7 @@ namespace AssignmentoSecondo
 
         public static void TestDelete(ICustomerRepository repos)
         {
-            bool sucess = repos.DeleteCustomer(60);
+            bool sucess = repos.DeleteCustomer(62);
             if(sucess) Console.WriteLine("Gratulerer nå er Nilsemann fjernet fra denne databasen!!! HURRA!!!");
 
         }
