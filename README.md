@@ -16,7 +16,7 @@ Return the favourite genre of a customer by amount of tracks bought that belongs
 Return all customers: GetAllCustomers <br />
 Add a new customer to the database: AddNewCustomer <br />
 Change the values of fields in a single Customer instance: UpdateCustomer <br />
-Return a page of customers, using parameters offset an limit: andGetPageOfCustomers
+Return a page of customers, using parameters offset and limit: andGetPageOfCustomers
 
 ## Authors
 The authors of this project are Håvard Lund and Erik Skryseth
