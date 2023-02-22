@@ -11,7 +11,7 @@ Database transactions supported by the console application: <br />
 Return a single instance from the database by id: GetCustomerById <br />
 Return a single instance from the database by name: GetCustomerByName <br />
 Return a single instance from the database by name: GetCustomersByCountry <br />
-Return the customer in the database that has spent the highest amount: GetCustomersByBiggestSpender <br />
+Return a list of customers from the database sorted by amount spent: GetCustomersByBiggestSpender <br />
 Return the favourite genre of a customer by amount of tracks bought that belongs to that genre:  GetCustomerFavoriteGenre <br />
 Return all customers: GetAllCustomers <br />
 Add a new customer to the database: AddNewCustomer <br />
