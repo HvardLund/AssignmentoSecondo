@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace AssignmentoSecondo.Repositories
 {
+    /// <summary>
+    /// Interface used to implement the repository design pattern
+    /// </summary>
     internal interface ICustomerRepository
     {
         public Customer GetCustomerById(int id);
