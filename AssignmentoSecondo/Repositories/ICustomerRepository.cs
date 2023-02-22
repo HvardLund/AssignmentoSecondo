@@ -16,7 +16,10 @@ namespace AssignmentoSecondo.Repositories
         public List<CustomerSpender> GetCustomersByBiggestSpender();
         public List<CustomerGenre> GetCustomerFavoriteGenre(int id);
         public List<Customer> GetAllCustomers();
-        public bool AddNewCustomer(Customer customer);
-        public bool UpdateNewCustomer(Customer customer);
+        public List<Customer> GetPageOfCustomers(int offset, int limit);
+        public bool AddCustomer(Customer customer);
+        public bool UpdateCustomer(Customer customer);
+        public bool DeleteCustomer(int id);
+
     }
 }

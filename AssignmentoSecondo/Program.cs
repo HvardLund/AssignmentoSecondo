@@ -3,13 +3,18 @@ using AssignmentoSecondo;
 using AssignmentoSecondo.Modules;
 using AssignmentoSecondo.Repositories;
 using Microsoft.Data.SqlClient;
+using static System.Net.Mime.MediaTypeNames;
 
 ICustomerRepository repos = new CustomerRepository();
 
-//test.TestSelectAll(repos);
+
 //test.TestGetCustomersByCountry(repos);
 //test.TestGetCustomersByTotalAmountBought(repos);
-TestRepository.TestGetCustomerByName(repos);
+//TestRepository.TestAddNewCustomer(repos);
+//TestRepository.TestUpdateCustomer(repos);
 //TestRepository.TestGetCustomerById(repos);
 //TestRepository.TestGetFavoriteGenreById(repos);
-
+//TestRepository.TestSelectAll(repos);
+//TestRepository.TestGetCustomerByName(repos);
+//TestRepository.TestDelete(repos);
+TestRepository.TestPagination(repos);

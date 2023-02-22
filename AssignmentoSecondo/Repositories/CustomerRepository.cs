@@ -56,7 +56,7 @@ namespace AssignmentoSecondo.Repositories
 
         public Customer GetCustomerById(int id)
         {
-            Customer customer;
+            Customer customer = new Customer();
             using SqlConnection connection = new SqlConnection((ConnectionStringHelper.GetConnectionString()));
             connection.Open();
             string sql = "SELECT CustomerId, FirstName, LastName, Country, PostalCode, Phone, Email FROM Customer WHERE CustomerId = @CustomerId";
@@ -64,9 +64,10 @@ namespace AssignmentoSecondo.Repositories
             cmd.Parameters.AddWithValue("@CustomerId", id);
             using SqlDataReader reader = cmd.ExecuteReader();
             
-            if(reader.NextResult())
+            //Any other method for reading the result ends up with false, so that's why reader.Read() was chosen. 
+            if(reader.Read())
             {
-                customer = new Customer(
+                customer = (new Customer(
                     reader.GetInt32(0),
                     reader.GetString(1),
                     reader.GetString(2),
@@ -74,7 +75,7 @@ namespace AssignmentoSecondo.Repositories
                     reader.GetString(4),
                     reader.GetString(5),
                     reader.GetString(6)
-                    );
+                    ));
             } else
             {
                 throw new Exception("Fant ingenting!");
@@ -173,10 +174,10 @@ namespace AssignmentoSecondo.Repositories
             return customersByCountry;
         }
 
-        public bool AddNewCustomer(Customer customer)
+        public bool AddCustomer(Customer customer)
         {
             bool sucsess = false;
-            string sql = "INSERT INTO Customers(FirstName,LastName,Country,PostalCode,Phone,Email) " +
+            string sql = "INSERT INTO Customer(FirstName,LastName,Country,PostalCode,Phone,Email) " +
                 "VALUES(@FirstName, @LastName, @Country, @PostalCode, @Phone, @Email)";
             try
             {
@@ -201,10 +202,86 @@ namespace AssignmentoSecondo.Repositories
             }
             return sucsess;
         }
-        public bool UpdateNewCustomer(Customer customer)
+        public bool UpdateCustomer(Customer customer)
         {
-            
-            throw new NotImplementedException();
+            bool sucsess = false;
+            try
+            {
+                using SqlConnection connection = new SqlConnection(ConnectionStringHelper.GetConnectionString());
+                connection.Open();
+                string sql = "UPDATE Customer SET FirstName = @FirstName, " +
+                    "LastName = @LastName, " +
+                    "Country = @Country, " +
+                    "PostalCode = @PostalCode, " +
+                    "Phone = @Phone, " +
+                    "Email = @Email " +
+                    "WHERE CustomerId = @CustomerId";
+                using SqlCommand cmd = new SqlCommand(sql, connection);
+                cmd.Parameters.AddWithValue("@CustomerId", customer.CustomerId);
+                cmd.Parameters.AddWithValue("@FirstName", customer.FirstName);
+                cmd.Parameters.AddWithValue("@LastName", customer.LastName);
+                cmd.Parameters.AddWithValue("@Country", customer.Country);
+                cmd.Parameters.AddWithValue("@PostalCode", customer.PostalCode);
+                cmd.Parameters.AddWithValue("@Phone", customer.Phone);
+                cmd.Parameters.AddWithValue("@Email", customer.Email);
+                sucsess = cmd.ExecuteNonQuery() > 0 ? true : false;
+            } catch (Exception ex)
+            {
+
+            }
+
+            return sucsess;
+        }
+
+        public bool DeleteCustomer(int id)
+        {
+            bool success = false;
+            try
+            {
+                using SqlConnection connection = new SqlConnection(ConnectionStringHelper.GetConnectionString());
+                connection.Open();
+                string sql = "DELETE Customer WHERE CustomerId = @CustomerId";
+                using SqlCommand cmd = new SqlCommand(sql, connection);
+                cmd.Parameters.AddWithValue("@CustomerId", id);
+                success = cmd.ExecuteNonQuery() > 0 ? true : false;
+            } catch(Exception ex)
+            {
+
+            }
+
+            return success;
+        }
+
+        public List<Customer> GetPageOfCustomers(int offset, int limit)
+        {
+            List<Customer> customerPage = new List<Customer>();
+            try
+            {
+                using SqlConnection connection = new SqlConnection(ConnectionStringHelper.GetConnectionString());
+                connection.Open();
+                string sql = "SELECT CustomerId, FirstName, LastName, Country, PostalCode, Phone, Email FROM Customer ORDER BY CustomerId OFFSET @Offset ROWS FETCH NEXT @Limit ROWS ONLY";
+                using SqlCommand cmd = new SqlCommand(sql, connection);
+                cmd.Parameters.AddWithValue("@Offset", offset);
+                cmd.Parameters.AddWithValue("@Limit", limit);
+                using SqlDataReader reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    customerPage.Add(new Customer(
+                        reader.GetInt32(0),
+                        reader.GetString(1),
+                        reader.GetString(2),
+                        reader.GetString(3),
+                        reader.GetString(4),
+                        reader.GetString(5),
+                        reader.GetString(6)
+                        ));
+                }
+            } catch(Exception ex)
+            {
+
+            }
+            return customerPage;
+
         }
     }
 }
